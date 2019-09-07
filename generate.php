@@ -10,28 +10,28 @@ foreach ($lines as $line) {
         continue;
     }
     $parts = explode(",",$line);
-    print_r($parts);
     $a = array();
-    $a["name"] = $parts[0];
-    $a["latlong"] = get_lat_long($parts[5]);
-    $a["image"] = get_image($parts[7],$parts[8],$parts[9]);
-    $a["level"] = $parts[10];
+    $a["name"] = $parts[1];
+    $a["latlong"] = get_lat_long($parts[0],$parts[6],$parts[7]);
+    $a["image"] = get_image($parts[2],$parts[3],$parts[4]);
+    $a["level"] = $parts[5];
     $a["visible"] = false;
     $array[] = $a;
     $count++;
 }
 
-print_r($array);
+
 echo json_encode($array);
 
-function get_lat_long($address){
+function get_lat_long($address,$lat,$long){
+    if (!empty($lat) && !empty($long)) return array($lat,$long);
 
     $address = str_replace(" ", "+", $address);
 
     $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&sensor=false&region=Australia&key=");
     try {
         $json = json_decode($json,true);
-        print_r($json);
+        
         if (empty($json) || !isset($json['results'][0])) return;
 
         $lat = $json['results'][0]['geometry']['location']['lat'];
