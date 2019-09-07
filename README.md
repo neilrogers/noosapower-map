@@ -1,0 +1,1 @@
+# noosapower-map
